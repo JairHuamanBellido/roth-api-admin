@@ -6,10 +6,7 @@
       "DOM"
     ] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
 
-    "types": [
-      "jest",
-      "node"
-    ],
+    "types": ["reflect-metadata", "jest", "node"],
     "experimentalDecorators": true /* Enable experimental support for TC39 stage 2 draft decorators. */,
     "emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
 
