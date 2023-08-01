@@ -1,0 +1,24 @@
+{
+  "name": "roth-api-admin",
+  "version": "1.0.0",
+  "description": "API Gateway for administrators",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "keywords": [
+    "Lambda",
+    "Websockets",
+    "AWS",
+    "Typescript"
+  ],
+  "author": "Jair Orlando Huaman Bellido",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "esbuild": "^0.18.17",
+    "serverless-esbuild": "^1.46.0",
+    "serverless-offline": "^12.0.4",
+    "serverless-plugin-typescript": "^2.1.5",
+    "typescript": "^5.1.6"
+  }
+}
