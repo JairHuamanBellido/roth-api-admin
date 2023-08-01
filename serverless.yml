@@ -1,14 +1,19 @@
 service: roth-api-admin
-frameworkVersion: '3'
-
+frameworkVersion: "3"
+useDotenv: true
 provider:
   name: aws
-  runtime: nodejs18.x
-
+  runtime: nodejs16.x
+  region: us-east-2
+  deploymentPrefix: ${file(./env/variable.js):folderName}
+  deploymentBucket:
+    name: ${file(./env/variable.js):bucketName}
 functions:
   api:
-    handler: index.handler
+    handler: src/index.handler
     events:
       - httpApi:
           path: /
           method: get
+plugins:
+  - serverless-esbuild
