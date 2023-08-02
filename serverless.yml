@@ -1,6 +1,8 @@
 service: roth-api-admin
 frameworkVersion: "3"
 useDotenv: true
+package:
+  individually: true
 provider:
   name: aws
   runtime: nodejs16.x
@@ -9,11 +11,53 @@ provider:
   deploymentBucket:
     name: ${file(./env/variable.js):bucketName}
 functions:
-  api:
-    handler: src/index.handler
+  signup:
+    handler: src/functions/sign-up.handler
+    role: RothAdminSignUpRole
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /signup
+          method: POST
+    environment:
+      COGNITO_CLIENT_ID: ${file(./env/variable.js):cognitoClientId}
+  preSignup:
+    handler: src/functions/pre-sign-up.handler
+    
 plugins:
   - serverless-esbuild
+resources:
+  Resources:
+    RothAdminSignUpRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: roth-admin-signup-role
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: roth-admin-signup-policy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - cognito-idp:SignUp
+                  Resource:
+                    - "*"
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - '*'
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                    - logs:CreateLogGroup
+                    - logs:TagResource
+                  Resource:
+                    - '*'
