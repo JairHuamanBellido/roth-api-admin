@@ -5,6 +5,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { Administrator } from "../../domain/entity/Administrator";
 import { config } from "dotenv";
+import { CognitoError } from "../errors/CognitoError";
 
 config();
 
@@ -30,6 +31,13 @@ export class AdministratorRepository {
       ],
     });
 
-    await this.cognito.send(command);
+    return await this.cognito
+      .send(command)
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        CognitoError.execute(error);
+      });
   }
 }
