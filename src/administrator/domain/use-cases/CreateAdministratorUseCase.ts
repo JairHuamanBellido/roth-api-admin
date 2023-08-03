@@ -3,6 +3,7 @@ import { UseCase } from "../../../core/use-case/use-case";
 import { Administrator } from "../entity/Administrator";
 import { AdministratorRepository } from "../../infrastructure/repository/AdministratorRepository";
 import { ICreateAdministrator } from "../interface/ICreateAdministrator";
+import { CustomError } from "../../../core/errors/CustomErorr";
 
 @injectable()
 export class CreateAdministratorUseCase
@@ -13,7 +14,13 @@ export class CreateAdministratorUseCase
     private readonly _repository: AdministratorRepository
   ) {}
   async execute({ email, name, password }: ICreateAdministrator) {
-    const administrator = new Administrator(name, email, password);
-    await this._repository.create(administrator);
+    try {
+      const administrator = new Administrator(name, email, password);
+      const res = await this._repository.create(administrator);
+
+      return res;
+    } catch (error: CustomError | any) {
+      throw error;
+    }
   }
 }
