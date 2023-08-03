@@ -10,6 +10,15 @@ provider:
   deploymentPrefix: ${file(./env/variable.js):folderName}
   deploymentBucket:
     name: ${file(./env/variable.js):bucketName}
+  httpApi:
+    cors:
+      allowedOrigins: "*"
+      allowedHeaders: "*"
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
 functions:
   signup:
     handler: src/functions/sign-up.handler
