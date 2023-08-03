@@ -56,7 +56,7 @@ export class AdministratorRepository {
 
     return await this.cognito
       .send(command)
-      .then((res) => res)
+      .then((res) => res.AuthenticationResult)
       .catch((error) => {
         CognitoAuthenticationError.execute(error);
       });
