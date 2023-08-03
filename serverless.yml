@@ -22,24 +22,33 @@ provider:
 functions:
   signup:
     handler: src/functions/sign-up.handler
-    role: RothAdminSignUpRole
+    role: RothAdminRole
     events:
       - httpApi:
           path: /signup
           method: POST
     environment:
       COGNITO_CLIENT_ID: ${file(./env/variable.js):cognitoClientId}
+  signin:
+    handler: src/functions/sign-in.handler
+    role: RothAdminRole
+    events:
+      - httpApi:
+          path: /auth
+          method: POST
+    environment:
+      COGNITO_CLIENT_ID: ${file(./env/variable.js):cognitoClientId}
   preSignup:
     handler: src/functions/pre-sign-up.handler
-    
+
 plugins:
   - serverless-esbuild
 resources:
   Resources:
-    RothAdminSignUpRole:
+    RothAdminRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: roth-admin-signup-role
+        RoleName: roth-admin-role
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -49,24 +58,17 @@ resources:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
         Policies:
-          - PolicyName: roth-admin-signup-policy
+          - PolicyName: roth-admin-policy
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
                 - Effect: Allow
                   Action:
                     - cognito-idp:SignUp
-                  Resource:
-                    - "*"
-                - Effect: Allow
-                  Action:
+                    - cognito-idp:InitiateAuth
                     - logs:PutLogEvents
-                  Resource:
-                    - '*'
-                - Effect: Allow
-                  Action:
                     - logs:CreateLogStream
                     - logs:CreateLogGroup
                     - logs:TagResource
                   Resource:
-                    - '*'
+                    - "*"
